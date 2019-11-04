@@ -16,7 +16,7 @@ namespace HaveIBeenPwned
 
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             string password;
 
@@ -35,7 +35,7 @@ namespace HaveIBeenPwned
 
             Console.WriteLine($"Searching for password with hash: {hash}");
 
-            var response = GetPwndHashes(firstChars).Result;
+            var response = await GetPwndHashes(firstChars);
             var items = ConvertHashResponseToHashItems(response, firstChars);
 
             Console.WriteLine($"Number of pwned passwords with the same first hash chars: {items.Count}");
