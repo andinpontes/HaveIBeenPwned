@@ -23,7 +23,8 @@ namespace HaveIBeenPwned
             if (args.Length <= 0)
             {
                 Console.Write("Type in password: ");
-                password = Console.ReadLine();
+                password = ReadPassword();
+                Console.WriteLine();
             }
             else
             {
@@ -50,7 +51,7 @@ namespace HaveIBeenPwned
             else
             {
                 Console.WriteLine();
-                Console.WriteLine($"SORRY: Your password was owned at least {item.Usages} times!");
+                Console.WriteLine($"SORRY: Your password was owned at least {item.Usages:n0} times!");
                 Console.WriteLine();
             }
         }
@@ -73,7 +74,7 @@ namespace HaveIBeenPwned
             return await httpClient.GetStringAsync(url);
         }
 
-        static string Hash(string input)
+        private static string Hash(string input)
         {
             using (SHA1Managed sha1 = new SHA1Managed())
             {
@@ -86,6 +87,32 @@ namespace HaveIBeenPwned
                 }
 
                 return sb.ToString();
+            }
+        }
+
+        private static string ReadPassword()
+        {
+            string result = "";
+           
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    return result;
+                }
+                
+                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                {
+                    result += key.KeyChar;
+                    Console.Write("*");
+                }
+                else if (key.Key == ConsoleKey.Backspace && result.Length > 0)
+                {
+                    result = result.Substring(0, (result.Length - 1));
+                    Console.Write("\b \b");
+                }
             }
         }
     }
